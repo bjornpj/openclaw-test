@@ -1,0 +1,34 @@
+{
+  "generated_at_utc": "2026-02-09T22:57:00.767216Z",
+  "snapshot_day": "2026-02-09",
+  "regions": [
+    "US",
+    "GB",
+    "JP"
+  ],
+  "prefix_count": 1,
+  "records_collected": 0,
+  "symbol_count": 0,
+  "master_snapshot_csv": "/home/bjorn/.openclaw/workspace/stock_universe/data/snapshots/2026-02-09/master_tickers.csv",
+  "master_latest_csv": "/home/bjorn/.openclaw/workspace/stock_universe/data/master_tickers_latest.csv",
+  "errors": [
+    {
+      "region": "US",
+      "prefix": "A",
+      "error": "Yahoo search failed (US:A): 429 Client Error: Too Many Requests for url: https://query1.finance.yahoo.com/v1/finance/search?q=A&quotesCount=100&newsCount=0&listsCount=0&enableFuzzyQuery=false&region=US&lang=en-US"
+    },
+    {
+      "region": "GB",
+      "prefix": "A",
+      "error": "Yahoo search failed (GB:A): 429 Client Error: Too Many Requests for url: https://query1.finance.yahoo.com/v1/finance/search?q=A&quotesCount=100&newsCount=0&listsCount=0&enableFuzzyQuery=false&region=GB&lang=en-US"
+    },
+    {
+      "region": "JP",
+      "prefix": "A",
+      "error": "Yahoo search failed (JP:A): 429 Client Error: Too Many Requests for url: https://query1.finance.yahoo.com/v1/finance/search?q=A&quotesCount=100&newsCount=0&listsCount=0&enableFuzzyQuery=false&region=JP&lang=en-US"
+    }
+  ],
+  "prev_snapshot_csv": null,
+  "added_count": 0,
+  "removed_count": 0
+}

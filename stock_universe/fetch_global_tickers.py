@@ -3,60 +3,82 @@ import argparse
 import csv
 import datetime as dt
 import json
-import os
-import sys
+import string
 import time
 from pathlib import Path
-from typing import Dict, Iterable, List, Optional
+from typing import Dict, Iterable, List, Optional, Set, Tuple
 
 import requests
 
-BASE_URL = "https://eodhd.com/api"
+YAHOO_SEARCH_URL = "https://query1.finance.yahoo.com/v1/finance/search"
+HTTP_HEADERS = {
+    "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0 Safari/537.36",
+    "Accept": "application/json,text/plain,*/*",
+}
 
-# Pragmatic "major exchange" starter set.
-# You can add/remove codes as needed.
-DEFAULT_MAJOR_EXCHANGES = [
-    "US", "NYSE", "NASDAQ", "AMEX", "TSX", "LSE", "XETRA", "F", "PA", "AS",
-    "SW", "MC", "MI", "BR", "STU", "TO", "HK", "T", "SHE", "SHG", "BSE", "NSE",
-    "AX", "NZ", "KQ", "KO", "SA", "MX", "TA", "BUD", "WAR",
-]
+# Regions chosen to cover major global markets in a no-key setup.
+DEFAULT_REGIONS = ["US", "CA", "GB", "DE", "FR", "IT", "ES", "AU", "NZ", "JP", "HK", "IN", "SG", "BR", "MX"]
+DEFAULT_LANG = "en-US"
 
 
-def api_get(path: str, params: Dict[str, str], timeout: int = 45, retries: int = 3):
-    url = f"{BASE_URL}{path}"
+def yahoo_search(query: str, region: str, count: int = 100, retries: int = 4) -> Dict:
+    params = {
+        "q": query,
+        "quotesCount": str(count),
+        "newsCount": "0",
+        "listsCount": "0",
+        "enableFuzzyQuery": "false",
+        "region": region,
+        "lang": DEFAULT_LANG,
+    }
     last_err = None
     for attempt in range(1, retries + 1):
         try:
-            r = requests.get(url, params=params, timeout=timeout)
-            if r.status_code >= 400:
-                raise RuntimeError(f"HTTP {r.status_code}: {r.text[:300]}")
+            r = requests.get(YAHOO_SEARCH_URL, params=params, headers=HTTP_HEADERS, timeout=30)
+            if r.status_code == 429 and attempt < retries:
+                time.sleep(1.5 * attempt)
+                continue
+            r.raise_for_status()
             return r.json()
         except Exception as e:
             last_err = e
             if attempt < retries:
                 time.sleep(1.5 * attempt)
-    raise RuntimeError(f"Failed GET {url}: {last_err}")
+    raise RuntimeError(f"Yahoo search failed ({region}:{query}): {last_err}")
 
 
-def normalize_symbol(exchange_code: str, row: Dict) -> Dict[str, str]:
+def normalize_quote(region: str, q: Dict) -> Optional[Dict[str, str]]:
+    symbol = str(q.get("symbol") or "").strip()
+    if not symbol:
+        return None
+
+    quote_type = str(q.get("quoteType") or "").upper()
+    if quote_type not in {"EQUITY", "ETF", "MUTUALFUND", "INDEX", "FUTURE", "CRYPTOCURRENCY", "CURRENCY"}:
+        return None
+
     return {
-        "symbol": str(row.get("Code") or row.get("code") or "").strip(),
-        "name": str(row.get("Name") or row.get("name") or "").strip(),
-        "exchange": exchange_code,
-        "country": str(row.get("Country") or row.get("country") or "").strip(),
-        "currency": str(row.get("Currency") or row.get("currency") or "").strip(),
-        "type": str(row.get("Type") or row.get("type") or "").strip(),
-        "isin": str(row.get("ISIN") or row.get("isin") or "").strip(),
-        "figi": str(row.get("FIGI") or row.get("figi") or "").strip(),
-        "mic": str(row.get("MIC") or row.get("mic") or "").strip(),
-        "active": str(row.get("IsActive") or row.get("is_active") or "").strip(),
+        "symbol": symbol,
+        "name": str(q.get("shortname") or q.get("longname") or "").strip(),
+        "exchange": str(q.get("exchange") or "").strip(),
+        "exch_disp": str(q.get("exchDisp") or "").strip(),
+        "type": quote_type,
+        "region": region,
     }
 
 
-def read_prev_symbols(prev_csv: Path) -> set:
+def write_csv(path: Path, rows: Iterable[Dict[str, str]], fieldnames: List[str]):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("w", newline="", encoding="utf-8") as f:
+        w = csv.DictWriter(f, fieldnames=fieldnames)
+        w.writeheader()
+        for r in rows:
+            w.writerow(r)
+
+
+def read_prev_symbols(prev_csv: Path) -> Set[Tuple[str, str]]:
     if not prev_csv.exists():
         return set()
-    out = set()
+    out: Set[Tuple[str, str]] = set()
     with prev_csv.open("r", newline="", encoding="utf-8") as f:
         for row in csv.DictReader(f):
             out.add((row.get("exchange", ""), row.get("symbol", "")))
@@ -77,82 +99,66 @@ def find_previous_snapshot(root: Path, today_folder: str) -> Optional[Path]:
     return None
 
 
-def write_csv(path: Path, rows: Iterable[Dict[str, str]], fieldnames: List[str]):
-    path.parent.mkdir(parents=True, exist_ok=True)
-    with path.open("w", newline="", encoding="utf-8") as f:
-        w = csv.DictWriter(f, fieldnames=fieldnames)
-        w.writeheader()
-        for r in rows:
-            w.writerow(r)
+def build_prefixes(two_char: bool = False, max_prefixes: int = 0) -> List[str]:
+    base = list(string.ascii_uppercase) + list(string.digits)
+    if two_char:
+        pfx = base + [a + b for a in string.ascii_uppercase for b in string.ascii_uppercase]
+    else:
+        pfx = base
+    if max_prefixes > 0:
+        pfx = pfx[:max_prefixes]
+    return pfx
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Fetch global ticker symbol universe (major exchanges) daily")
-    parser.add_argument("--api-key", default=os.getenv("EODHD_API_KEY"), help="EODHD API key (or set EODHD_API_KEY)")
+    parser = argparse.ArgumentParser(description="Fetch global ticker universe from Yahoo Finance (no API key)")
     parser.add_argument("--out", default="stock_universe/data", help="Output folder")
-    parser.add_argument("--major-only", action="store_true", default=True, help="Fetch only default major exchanges")
-    parser.add_argument("--all-exchanges", action="store_true", help="Fetch all exchanges from provider")
-    parser.add_argument("--exchanges", default="", help="Comma-separated exchange codes override")
+    parser.add_argument("--regions", default=",".join(DEFAULT_REGIONS), help="Comma-separated Yahoo regions")
+    parser.add_argument("--two-char-prefix", action="store_true", help="Expand search with AA..ZZ prefixes (larger coverage, slower)")
+    parser.add_argument("--max-prefixes", type=int, default=0, help="Limit number of prefixes for faster test runs")
+    parser.add_argument("--sleep-ms", type=int, default=120, help="Sleep between requests")
     args = parser.parse_args()
 
-    if not args.api_key:
-        print("ERROR: Missing API key. Set EODHD_API_KEY or pass --api-key", file=sys.stderr)
-        sys.exit(2)
-
     out_root = Path(args.out)
-    snapshot_day = dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%d")
+    snapshot_day = dt.datetime.now(dt.UTC).strftime("%Y-%m-%d")
     snapshot_dir = out_root / "snapshots" / snapshot_day
     raw_dir = snapshot_dir / "raw"
     raw_dir.mkdir(parents=True, exist_ok=True)
 
-    params = {"api_token": args.api_key, "fmt": "json"}
-
-    exchanges = api_get("/exchanges-list/", params=params)
-    (raw_dir / "exchanges.json").write_text(json.dumps(exchanges, indent=2), encoding="utf-8")
-
-    if args.exchanges.strip():
-        target = [x.strip().upper() for x in args.exchanges.split(",") if x.strip()]
-    elif args.all_exchanges:
-        target = sorted({str(x.get("Code", "")).upper() for x in exchanges if x.get("Code")})
-    else:
-        discovered = {str(x.get("Code", "")).upper() for x in exchanges if x.get("Code")}
-        target = [x for x in DEFAULT_MAJOR_EXCHANGES if x in discovered]
+    regions = [r.strip().upper() for r in args.regions.split(",") if r.strip()]
+    prefixes = build_prefixes(two_char=args.two_char_prefix, max_prefixes=args.max_prefixes)
 
     all_rows: List[Dict[str, str]] = []
     errors = []
 
-    for code in target:
-        try:
-            symbols = api_get(f"/exchange-symbol-list/{code}", params=params)
-            (raw_dir / f"symbols_{code}.json").write_text(json.dumps(symbols, indent=2), encoding="utf-8")
-            for row in symbols:
-                norm = normalize_symbol(code, row)
-                if norm["symbol"]:
-                    all_rows.append(norm)
-            print(f"Fetched {code}: {len(symbols)}")
-            time.sleep(0.2)
-        except Exception as e:
-            errors.append({"exchange": code, "error": str(e)})
-            print(f"WARN {code}: {e}", file=sys.stderr)
+    for region in regions:
+        for p in prefixes:
+            try:
+                payload = yahoo_search(p, region=region, count=100)
+                (raw_dir / f"search_{region}_{p}.json").write_text(json.dumps(payload, indent=2), encoding="utf-8")
+                for q in payload.get("quotes", []) or []:
+                    row = normalize_quote(region, q)
+                    if row:
+                        all_rows.append(row)
+                time.sleep(max(0, args.sleep_ms) / 1000.0)
+            except Exception as e:
+                errors.append({"region": region, "prefix": p, "error": str(e)})
 
-    # Deduplicate by (exchange, symbol)
-    dedup = {}
+    dedup: Dict[Tuple[str, str], Dict[str, str]] = {}
     for r in all_rows:
-        dedup[(r["exchange"], r["symbol"])] = r
-    normalized = list(dedup.values())
-    normalized.sort(key=lambda x: (x["exchange"], x["symbol"]))
+        key = (r["exchange"], r["symbol"])
+        dedup[key] = r
 
-    fields = ["symbol", "name", "exchange", "country", "currency", "type", "isin", "figi", "mic", "active"]
+    normalized = sorted(dedup.values(), key=lambda x: (x["exchange"], x["symbol"]))
 
-    # Daily snapshot master file
+    fields = ["symbol", "name", "exchange", "exch_disp", "type", "region"]
+
     master_csv = snapshot_dir / "master_tickers.csv"
     write_csv(master_csv, normalized, fields)
 
-    # Legacy filename kept for backward compatibility
     normalized_csv = snapshot_dir / "normalized_symbols.csv"
     write_csv(normalized_csv, normalized, fields)
 
-    # Rolling latest master file for easy downstream consumption
     latest_csv = out_root / "master_tickers_latest.csv"
     write_csv(latest_csv, normalized, fields)
 
@@ -164,10 +170,11 @@ def main():
     removed = sorted(prev_set - cur_set)
 
     summary = {
-        "generated_at_utc": dt.datetime.now(dt.timezone.utc).isoformat(),
+        "generated_at_utc": dt.datetime.now(dt.UTC).isoformat().replace("+00:00", "Z"),
         "snapshot_day": snapshot_day,
-        "exchanges_requested": target,
-        "exchange_count": len(target),
+        "regions": regions,
+        "prefix_count": len(prefixes),
+        "records_collected": len(all_rows),
         "symbol_count": len(normalized),
         "master_snapshot_csv": str(master_csv),
         "master_latest_csv": str(latest_csv),
@@ -178,19 +185,24 @@ def main():
     }
     (snapshot_dir / "summary.json").write_text(json.dumps(summary, indent=2), encoding="utf-8")
 
-    report = []
-    report.append(f"# Daily Global Ticker Pull — {snapshot_day}")
-    report.append("")
-    report.append(f"- Exchanges requested: **{len(target)}**")
-    report.append(f"- Symbols collected: **{len(normalized)}**")
-    report.append(f"- Added vs prior snapshot: **{len(added)}**")
-    report.append(f"- Removed vs prior snapshot: **{len(removed)}**")
-    report.append(f"- Errors: **{len(errors)}**")
+    report = [
+        f"# Daily Global Ticker Pull (Yahoo, no-key) — {snapshot_day}",
+        "",
+        f"- Regions: **{len(regions)}** ({', '.join(regions)})",
+        f"- Prefixes queried: **{len(prefixes)}**",
+        f"- Raw records collected: **{len(all_rows)}**",
+        f"- Unique symbols: **{len(normalized)}**",
+        f"- Added vs prior snapshot: **{len(added)}**",
+        f"- Removed vs prior snapshot: **{len(removed)}**",
+        f"- Errors: **{len(errors)}**",
+        "",
+        "> Note: Yahoo search is best-effort discovery and may not be a complete official listing for each exchange.",
+    ]
     if errors:
         report.append("")
         report.append("## Errors")
-        for e in errors[:20]:
-            report.append(f"- {e['exchange']}: {e['error']}")
+        for e in errors[:30]:
+            report.append(f"- {e['region']}:{e['prefix']}: {e['error']}")
     (snapshot_dir / "report.md").write_text("\n".join(report) + "\n", encoding="utf-8")
 
     print(json.dumps(summary, indent=2))
