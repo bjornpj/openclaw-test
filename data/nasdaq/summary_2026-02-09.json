@@ -1,0 +1,10 @@
+{
+  "generated_at_utc": "2026-02-09T22:05:34.731323Z",
+  "run_day": "2026-02-09",
+  "rows": 5317,
+  "output_csv": "/home/bjorn/.openclaw/workspace/data/nasdaq/nasdaq_tickers_2026-02-09.csv",
+  "sources": [
+    "https://www.nasdaqtrader.com/dynamic/SymDir/nasdaqlisted.txt",
+    "https://www.nasdaqtrader.com/dynamic/SymDir/otherlisted.txt"
+  ]
+}
