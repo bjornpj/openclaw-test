@@ -1,0 +1,24 @@
+{
+  "generated_at_utc": "2026-02-10T21:48:19.932448Z",
+  "snapshot_day": "2026-02-10",
+  "regions": [
+    "US"
+  ],
+  "prefix_count": 1,
+  "records_collected": 0,
+  "symbol_count": 0,
+  "master_snapshot_csv": "/home/bjorn/.openclaw/workspace/stock_universe/data/snapshots/2026-02-10/master_tickers.csv",
+  "master_snapshot_minimal_csv": "/home/bjorn/.openclaw/workspace/stock_universe/data/snapshots/2026-02-10/master_tickers_minimal.csv",
+  "master_latest_csv": "/home/bjorn/.openclaw/workspace/stock_universe/data/master_tickers_latest.csv",
+  "master_latest_minimal_csv": "/home/bjorn/.openclaw/workspace/stock_universe/data/master_tickers_latest_minimal.csv",
+  "errors": [
+    {
+      "region": "US",
+      "prefix": "A",
+      "error": "Yahoo search failed (US:A): 429 Client Error: Too Many Requests for url: https://query1.finance.yahoo.com/v1/finance/search?q=A&quotesCount=100&newsCount=0&listsCount=0&enableFuzzyQuery=false&region=US&lang=en-US"
+    }
+  ],
+  "prev_snapshot_csv": "/home/bjorn/.openclaw/workspace/stock_universe/data/snapshots/2026-02-09/master_tickers.csv",
+  "added_count": 0,
+  "removed_count": 0
+}

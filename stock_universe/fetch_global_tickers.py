@@ -56,12 +56,14 @@ def normalize_quote(region: str, q: Dict) -> Optional[Dict[str, str]]:
     if quote_type not in {"EQUITY", "ETF", "MUTUALFUND", "INDEX", "FUTURE", "CRYPTOCURRENCY", "CURRENCY"}:
         return None
 
+    description = str(q.get("shortname") or q.get("longname") or "").strip()
+
     return {
-        "symbol": symbol,
-        "name": str(q.get("shortname") or q.get("longname") or "").strip(),
         "exchange": str(q.get("exchange") or "").strip(),
+        "ticker": symbol,  # Yahoo Finance symbol naming convention
+        "description": description,
         "exch_disp": str(q.get("exchDisp") or "").strip(),
-        "type": quote_type,
+        "quote_type": quote_type,
         "region": region,
     }
 
@@ -81,7 +83,8 @@ def read_prev_symbols(prev_csv: Path) -> Set[Tuple[str, str]]:
     out: Set[Tuple[str, str]] = set()
     with prev_csv.open("r", newline="", encoding="utf-8") as f:
         for row in csv.DictReader(f):
-            out.add((row.get("exchange", ""), row.get("symbol", "")))
+            ticker = row.get("ticker") or row.get("symbol") or ""
+            out.add((row.get("exchange", ""), ticker))
     return out
 
 
@@ -146,25 +149,41 @@ def main():
 
     dedup: Dict[Tuple[str, str], Dict[str, str]] = {}
     for r in all_rows:
-        key = (r["exchange"], r["symbol"])
+        key = (r["exchange"], r["ticker"])
         dedup[key] = r
 
-    normalized = sorted(dedup.values(), key=lambda x: (x["exchange"], x["symbol"]))
+    normalized = sorted(dedup.values(), key=lambda x: (x["exchange"], x["ticker"]))
 
-    fields = ["symbol", "name", "exchange", "exch_disp", "type", "region"]
+    # Requested primary format:
+    # exchange, ticker (Yahoo symbol), description
+    fields = ["exchange", "ticker", "description", "exch_disp", "quote_type", "region"]
 
     master_csv = snapshot_dir / "master_tickers.csv"
     write_csv(master_csv, normalized, fields)
+
+    # Strict 3-column output requested by user.
+    minimal_rows = [
+        {
+            "exchange": r.get("exchange", ""),
+            "ticker": r.get("ticker", ""),
+            "description": r.get("description", ""),
+        }
+        for r in normalized
+    ]
+    master_min_csv = snapshot_dir / "master_tickers_minimal.csv"
+    write_csv(master_min_csv, minimal_rows, ["exchange", "ticker", "description"])
 
     normalized_csv = snapshot_dir / "normalized_symbols.csv"
     write_csv(normalized_csv, normalized, fields)
 
     latest_csv = out_root / "master_tickers_latest.csv"
     write_csv(latest_csv, normalized, fields)
+    latest_min_csv = out_root / "master_tickers_latest_minimal.csv"
+    write_csv(latest_min_csv, minimal_rows, ["exchange", "ticker", "description"])
 
     prev_csv = find_previous_snapshot(out_root / "snapshots", snapshot_day)
     prev_set = read_prev_symbols(prev_csv) if prev_csv else set()
-    cur_set = {(r["exchange"], r["symbol"]) for r in normalized}
+    cur_set = {(r["exchange"], r["ticker"]) for r in normalized}
 
     added = sorted(cur_set - prev_set)
     removed = sorted(prev_set - cur_set)
@@ -177,7 +196,9 @@ def main():
         "records_collected": len(all_rows),
         "symbol_count": len(normalized),
         "master_snapshot_csv": str(master_csv),
+        "master_snapshot_minimal_csv": str(master_min_csv),
         "master_latest_csv": str(latest_csv),
+        "master_latest_minimal_csv": str(latest_min_csv),
         "errors": errors,
         "prev_snapshot_csv": str(prev_csv) if prev_csv else None,
         "added_count": len(added),
@@ -192,6 +213,7 @@ def main():
         f"- Prefixes queried: **{len(prefixes)}**",
         f"- Raw records collected: **{len(all_rows)}**",
         f"- Unique symbols: **{len(normalized)}**",
+        f"- Minimal file columns: **exchange, ticker, description**",
         f"- Added vs prior snapshot: **{len(added)}**",
         f"- Removed vs prior snapshot: **{len(removed)}**",
         f"- Errors: **{len(errors)}**",
