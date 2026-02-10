@@ -18,6 +18,11 @@ DEFAULT_LANG = "en-US"
 VALID_QUOTE_TYPES = {"EQUITY", "ETF", "MUTUALFUND", "INDEX", "FUTURE", "CRYPTOCURRENCY", "CURRENCY"}
 
 
+def fetch_stock_data(symbol, start_date, end_date):
+    stock_data = yf.download(symbol, start=start_date, end=end_date)
+    return stock_data
+
+
 def _build_search_kwargs(query: str, region: str, count: int) -> Dict:
     """Build kwargs compatible with the installed yfinance.Search signature."""
     sig = inspect.signature(yf.Search)
