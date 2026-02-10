@@ -1,6 +1,19 @@
-# Global Daily Ticker Pull (Yahoo, No API Key)
+# Global Daily Ticker Pull (pandas + yfinance)
 
-This setup builds a global *master ticker file* using Yahoo Finance search endpoints (free, no key).
+This setup builds a global master ticker file using:
+- import pandas as pd
+- import yfinance as yf
+
+No paid API key required.
+
+## Install dependencies
+
+Use a Python environment with pip available:
+
+```bash
+cd stock_universe
+python3 -m pip install -r requirements.txt
+```
 
 ## Run
 
@@ -11,10 +24,12 @@ python3 fetch_global_tickers.py
 
 ## Output
 
-Each run writes to:
+Each run writes:
 
-- `data/snapshots/YYYY-MM-DD/master_tickers.csv` (daily master file)
-- `data/master_tickers_latest.csv` (rolling latest master file)
+- `data/snapshots/YYYY-MM-DD/master_tickers.csv` (full columns)
+- `data/snapshots/YYYY-MM-DD/master_tickers_minimal.csv` (exchange,ticker,description)
+- `data/master_tickers_latest.csv` (rolling latest full)
+- `data/master_tickers_latest_minimal.csv` (rolling latest minimal)
 - `data/snapshots/YYYY-MM-DD/summary.json`
 - `data/snapshots/YYYY-MM-DD/report.md`
 - `data/snapshots/YYYY-MM-DD/raw/*.json`
@@ -24,7 +39,7 @@ Each run writes to:
 Faster test run:
 
 ```bash
-python fetch_global_tickers.py --max-prefixes 10
+python fetch_global_tickers.py --regions "US" --max-prefixes 5
 ```
 
 Higher coverage (slower):
@@ -47,4 +62,4 @@ python fetch_global_tickers.py --regions "US,CA,GB,DE,FR,JP,HK,IN,AU,BR"
 
 ## Note
 
-Yahoo discovery is best-effort (search-index based), not a guaranteed official complete listing for every exchange.
+Yahoo discovery is best-effort and may still hit temporary rate-limits depending on host/network reputation.
