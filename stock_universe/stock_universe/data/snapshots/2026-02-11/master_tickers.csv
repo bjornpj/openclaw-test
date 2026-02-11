@@ -1,0 +1,121 @@
+exchange,ticker,description,exch_disp,quote_type,region
+ASE,IAUX,i-80 Gold Corp.,NYSE MKT,EQUITY,MX
+CBT,0YM=F,,Chicago Board of Trade,FUTURE,MX
+CBT,10Y=F,"10-Year Yield Futures,Feb-2026",Chicago Board of Trade,FUTURE,MX
+CBT,KE=F,"KC HRW Wheat Futures,Mar-2026",Chicago Board of Trade,FUTURE,MX
+CBT,YM=F,Mini Dow Jones Indus.-$5 Mar 26,Chicago Board of Trade,FUTURE,MX
+CBT,Z3N=F,"3-Year T-Note Futures,Mar-2026",Chicago Board of Trade,FUTURE,MX
+CBT,ZL=F,"Soybean Oil Futures,Mar-2026",Chicago Board of Trade,FUTURE,MX
+CBT,ZN=F,"10-Year T-Note Futures,Mar-2026",Chicago Board of Trade,FUTURE,MX
+CBT,ZQ=F,"30 Day Federal Funds Futures,Ap",Chicago Board of Trade,FUTURE,MX
+CCC,BTC-USD,Bitcoin USD,CCC,CRYPTOCURRENCY,MX
+CCC,ETH-USD,Ethereum USD,CCC,CRYPTOCURRENCY,MX
+CCC,XLM-USD,Stellar USD,CCC,CRYPTOCURRENCY,MX
+CCC,XRP-USD,XRP USD,CCC,CRYPTOCURRENCY,MX
+CCY,BWPXDR=X,BWP/XDR,CCY,CURRENCY,MX
+CCY,EURZAR=X,EUR/ZAR,CCY,CURRENCY,MX
+CCY,JPY=X,USD/JPY,CCY,CURRENCY,MX
+CCY,JPYKRW=X,JPY/KRW,CCY,CURRENCY,MX
+CCY,KRW=X,USD/KRW,CCY,CURRENCY,MX
+CCY,KZT=X,USD/KZT,CCY,CURRENCY,MX
+CCY,NOK=X,USD/NOK,CCY,CURRENCY,MX
+CCY,OMRQAR=X,OMR/QAR,CCY,CURRENCY,MX
+CCY,QARTHX=X,QAR/THX,CCY,CURRENCY,MX
+CCY,ZAR=X,USD/ZAR,CCY,CURRENCY,MX
+CME,6E=F,"Euro FX Futures,Mar-2026",Chicago Mercantile Exchange,FUTURE,MX
+CME,6L=F,"Brazilian Real Futures,Mar-2026",Chicago Mercantile Exchange,FUTURE,MX
+CME,6Z=F,"South African Rand Futures,Mar-",Chicago Mercantile Exchange,FUTURE,MX
+CME,EMD=F,E-mini S&P MidCap 400 Index Fut,Chicago Mercantile Exchange,FUTURE,MX
+CME,EMT=F,E-mini S&P MidCap 400 BTIC Futu,Chicago Mercantile Exchange,FUTURE,MX
+CME,ES=F,E-Mini S&P 500 Mar 26,Chicago Mercantile Exchange,FUTURE,MX
+CME,ESG=F,E-mini S&P 500 ESG Index Future,Chicago Mercantile Exchange,FUTURE,MX
+CME,ESQ=F,"TACO on E-mini S&P 500 Futures,",Chicago Mercantile Exchange,FUTURE,MX
+CME,J7=F,"E-mini Japanese Yen Futures,Mar",Chicago Mercantile Exchange,FUTURE,MX
+CME,MES=F,MICRO E-MINI S&P 500 INDEX FUTU,Chicago Mercantile Exchange,FUTURE,MX
+CME,MMC=F,Micro E-mini S&P MidCap 400 Fut,Chicago Mercantile Exchange,FUTURE,MX
+CME,MNQ=F,Micro E-mini Nasdaq-100 Index F,Chicago Mercantile Exchange,FUTURE,MX
+CME,MSC=F,Micro E-mini S&P SmallCap 600 F,Chicago Mercantile Exchange,FUTURE,MX
+CME,NQ=F,Nasdaq 100 Mar 26,Chicago Mercantile Exchange,FUTURE,MX
+CME,PJY=F,British Pound/Japanese Yen Futu,Chicago Mercantile Exchange,FUTURE,MX
+CME,SMC=F,E-mini S&P SmallCap 600 Futures,Chicago Mercantile Exchange,FUTURE,MX
+CMX,ALI=F,"Aluminum Futures,Apr-2026",New York Commodity Exchange,FUTURE,MX
+CMX,FSF=F,"HMS 80/20 Ferrous Scrap, CFR Tu",New York Commodity Exchange,FUTURE,MX
+CMX,GC=F,Gold Apr 26,New York Commodity Exchange,FUTURE,MX
+CMX,HG=F,Copper Mar 26,New York Commodity Exchange,FUTURE,MX
+CMX,MGC=F,"Micro Gold Futures,Apr-2026",New York Commodity Exchange,FUTURE,MX
+CMX,SI=F,Silver Mar 26,New York Commodity Exchange,FUTURE,MX
+DJI,^DJI,Dow Jones Industrial Average,Dow Jones,INDEX,MX
+FRA,4GY.F,"Gym Group PLC, The            R",Frankfurt,EQUITY,MX
+HKG,0700.HK,TENCENT,Hong Kong,EQUITY,MX
+HKG,9866.HK,NIO-SW,Hong Kong,EQUITY,MX
+HKG,9868.HK,XPENG-W,Hong Kong,EQUITY,MX
+HKG,9888.HK,BIDU-SW,Hong Kong,EQUITY,MX
+HKG,9988.HK,BABA-W,Hong Kong,EQUITY,MX
+JPX,7203.T,TOYOTA MOTOR CORP,Tokyo Stock Exchange,EQUITY,MX
+JPX,7974.T,NINTENDO CO LTD,Tokyo Stock Exchange,EQUITY,MX
+JPX,9984.T,SOFTBANK GROUP CORP,Tokyo Stock Exchange,EQUITY,MX
+LSE,BP.L,BP PLC $0.25,London,EQUITY,MX
+LSE,HSBA.L,HSBC HOLDINGS PLC ORD $0.50 (UK,London,EQUITY,MX
+NCM,ERNAW,Ernexa Therapeutics Inc.,NASDAQ,EQUITY,MX
+NGM,ADAC,American Drive Acquisition Comp,NASDAQ,EQUITY,MX
+NGM,ADACW,American Drive Acquisition Company Warrant,NASDAQ,EQUITY,MX
+NGM,CCXI,Churchill Capital Corp XI,NASDAQ,EQUITY,MX
+NGM,CCXIW,Churchill Capital Corp XI Warrants,NASDAQ,EQUITY,MX
+NGM,DBCAU,D. Boral Acquisition I Corp. Unit,NASDAQ,EQUITY,MX
+NGM,DNNG,LEVERAGE SHARES 2X LONG DNN DAI,NASDAQ,ETF,MX
+NGM,HCICU,Hennessy Capital Investment Cor,NASDAQ,EQUITY,MX
+NGM,IEF,iShares 7-10 Year Treasury Bond,NASDAQ,ETF,MX
+NGM,LPCV,Launchpad Cadenza Acquisition C,NASDAQ,EQUITY,MX
+NGM,LPCVW,Launchpad Cadenza Acquisition Corp I Warrant,NASDAQ,EQUITY,MX
+NGM,MWH,"SOLV Energy, Inc. Class A Common Stock",NASDAQ,EQUITY,MX
+NGM,RCAX,Tidal Trust II - Defiance Daily Target 2X Long RCAT ETF,NASDAQ,EQUITY,MX
+NGM,RWAYI,Runway Growth Finance Corp.,NASDAQ,EQUITY,MX
+NGM,SVIVU,SPRING VY ACQUISITION CORP IV U,NASDAQ,EQUITY,MX
+NGM,TNXT,T. Rowe Price Innovation Leaders ETF,NASDAQ,EQUITY,MX
+NGM,TSCM,The 2023 ETF Series Trust - TimesSquare Quality Mid Cap Growth ETF,NASDAQ,EQUITY,MX
+NGM,VHCP,Vine Hill Capital Investment Co,NASDAQ,EQUITY,MX
+NGM,VHCPW,Vine Hill Capital Investment Corp. II Warrants,NASDAQ,EQUITY,MX
+NGM,XXX,CYBER HORNET S&P 500 and XRP 75,NASDAQ,ETF,MX
+NIM,^IXIC,NASDAQ Composite,NASDAQ GIDS,INDEX,MX
+NMS,COIN,"Coinbase Global, Inc. - 3",NASDAQ,EQUITY,MX
+NMS,EGHT,8x8 Inc,NASDAQ,EQUITY,MX
+NMS,HUT,Hut 8 Corp.,NASDAQ,EQUITY,MX
+NMS,NVDA,NVIDIA Corporation,NASDAQ,EQUITY,MX
+NMS,VSECU,VSE Corporation - Tangible Equi,NASDAQ,EQUITY,MX
+NMS,Z,"Zillow Group, Inc.",NASDAQ,EQUITY,MX
+NYB,KC=F,Coffee May 26,ICE Futures,FUTURE,MX
+NYB,OJ=F,Orange Juice Mar 26,ICE Futures,FUTURE,MX
+NYB,SB=F,Sugar #11 Mar 26,ICE Futures,FUTURE,MX
+NYM,B0=F,Mont Belvieu LDH Propane (OPIS),NY Mercantile,FUTURE,MX
+NYM,BZ=F,Brent Crude Oil Last Day Financ,NY Mercantile,FUTURE,MX
+NYM,CL=F,Crude Oil Mar 26,NY Mercantile,FUTURE,MX
+NYM,CU=F,Chicago Ethanol (Platts) Future,NY Mercantile,FUTURE,MX
+NYM,HO=F,Heating Oil Mar 26,NY Mercantile,FUTURE,MX
+NYM,NG=F,Natural Gas Mar 26,NY Mercantile,FUTURE,MX
+NYM,PL=F,Platinum Apr 26,NY Mercantile,FUTURE,MX
+NYM,QM=F,"E-mini Crude Oil Futures,Mar-20",NY Mercantile,FUTURE,MX
+NYM,RB=F,RBOB Gasoline Mar 26,NY Mercantile,FUTURE,MX
+NYQ,A,"Agilent Technologies, Inc.",NYSE,EQUITY,MX
+NYQ,B,Barrick Mining Corporation,NYSE,EQUITY,MX
+NYQ,C,"Citigroup, Inc.",NYSE,EQUITY,MX
+NYQ,D,"Dominion Energy, Inc.",NYSE,EQUITY,MX
+NYQ,E,ENI S.p.A.,NYSE,EQUITY,MX
+NYQ,F,Ford Motor Company,NYSE,EQUITY,MX
+NYQ,G,Genpact Limited,NYSE,EQUITY,MX
+NYQ,H,Hyatt Hotels Corporation,NYSE,EQUITY,MX
+NYQ,J,Jacobs Solutions Inc.,NYSE,EQUITY,MX
+NYQ,L,Loews Corporation,NYSE,EQUITY,MX
+NYQ,MMM,3M Company,NYSE,EQUITY,MX
+NYQ,O,Realty Income Corporation,NYSE,EQUITY,MX
+NYQ,Q,"Qnity Electronics, Inc.",NYSE,EQUITY,MX
+NYQ,R,"Ryder System, Inc.",NYSE,EQUITY,MX
+NYQ,S,"SentinelOne, Inc.",NYSE,EQUITY,MX
+NYQ,T,AT&T Inc.,NYSE,EQUITY,MX
+NYQ,U,Unity Software Inc.,NYSE,EQUITY,MX
+NYQ,V,Visa Inc.,NYSE,EQUITY,MX
+NYQ,W,Wayfair Inc.,NYSE,EQUITY,MX
+PAR,^FCHI,CAC 40,Paris,INDEX,MX
+PCX,QQQU,Direxion Daily Magnificent 7 Bu,NYSEArca,ETF,MX
+PCX,SOXL,Direxion Daily Semiconductor Bu,NYSEArca,ETF,MX
+SHH,000001.SS,SSE Composite Index,Shanghai,INDEX,MX
+TOR,HUT.TO,HUT 8 CORP,Toronto,EQUITY,MX
