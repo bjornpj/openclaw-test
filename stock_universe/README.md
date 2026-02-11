@@ -34,6 +34,34 @@ Each run writes:
 - `data/snapshots/YYYY-MM-DD/report.md`
 - `data/snapshots/YYYY-MM-DD/raw/*.json`
 
+## Collect historical prices for the global universe
+
+After generating `data/master_tickers_latest.csv`, run:
+
+```bash
+cd stock_universe
+python3 fetch_global_prices.py --years 2 --interval 1d
+```
+
+This writes:
+
+- `data/prices/YYYY-MM-DD/global_prices.csv` (long table: date,ticker,exchange,OHLCV)
+- `data/prices/YYYY-MM-DD/by_ticker/*.csv` (one file per symbol)
+- `data/prices/YYYY-MM-DD/summary.json`
+
+Useful options:
+
+```bash
+# Quick test (first 200 symbols)
+python3 fetch_global_prices.py --limit 200
+
+# Weekly bars, 5 years
+python3 fetch_global_prices.py --years 5 --interval 1wk
+
+# Smaller request chunks (helps with rate-limit/network issues)
+python3 fetch_global_prices.py --batch-size 50 --pause-ms 500
+```
+
 ## Tuning
 
 Faster test run:
