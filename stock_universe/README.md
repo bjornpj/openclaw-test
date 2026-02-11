@@ -17,9 +17,18 @@ python3 -m pip install -r requirements.txt
 
 ## Run
 
+### Fast (discovery / smaller universe)
 ```bash
 cd stock_universe
 python3 fetch_global_tickers.py
+```
+
+### Larger universe (recommended)
+Uses Yahoo screener pagination per exchange and usually returns thousands of symbols.
+
+```bash
+cd stock_universe
+python3 fetch_global_tickers_full.py
 ```
 
 ## Output
@@ -80,6 +89,19 @@ Custom regions:
 
 ```bash
 python fetch_global_tickers.py --regions "US,CA,GB,DE,FR,JP,HK,IN,AU,BR"
+```
+
+For the larger screener-based pull:
+
+```bash
+# All configured major regions
+python fetch_global_tickers_full.py
+
+# Only US + Canada (quick sanity run)
+python fetch_global_tickers_full.py --regions "US,CA"
+
+# Add pacing if Yahoo starts rate-limiting
+python fetch_global_tickers_full.py --pause-ms 400
 ```
 
 ## Daily cron (6:00 AM ET)
