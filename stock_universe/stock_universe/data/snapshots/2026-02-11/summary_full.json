@@ -1,0 +1,190 @@
+{
+  "generated_at_utc": "2026-02-11T21:05:27.326826Z",
+  "snapshot_day": "2026-02-11",
+  "regions": [
+    "US",
+    "CA",
+    "GB",
+    "DE",
+    "FR",
+    "IT",
+    "ES",
+    "NL",
+    "CH",
+    "JP",
+    "HK",
+    "IN",
+    "AU",
+    "SG",
+    "BR",
+    "MX"
+  ],
+  "exchanges_total": 32,
+  "symbol_count": 102039,
+  "master_snapshot_csv": "stock_universe/data/snapshots/2026-02-11/master_tickers.csv",
+  "master_latest_csv": "stock_universe/data/master_tickers_latest.csv",
+  "errors": [
+    {
+      "region": "DE",
+      "exchange": "HAN",
+      "error": "Invalid EQ value \"HAN\""
+    }
+  ],
+  "stats": [
+    {
+      "region": "US",
+      "exchange": "NMS",
+      "rows": 1464
+    },
+    {
+      "region": "US",
+      "exchange": "NYQ",
+      "rows": 2822
+    },
+    {
+      "region": "US",
+      "exchange": "ASE",
+      "rows": 301
+    },
+    {
+      "region": "US",
+      "exchange": "NGM",
+      "rows": 1232
+    },
+    {
+      "region": "US",
+      "exchange": "NCM",
+      "rows": 1694
+    },
+    {
+      "region": "CA",
+      "exchange": "TOR",
+      "rows": 1042
+    },
+    {
+      "region": "CA",
+      "exchange": "VAN",
+      "rows": 1345
+    },
+    {
+      "region": "CA",
+      "exchange": "CNQ",
+      "rows": 576
+    },
+    {
+      "region": "CA",
+      "exchange": "NEO",
+      "rows": 2059
+    },
+    {
+      "region": "GB",
+      "exchange": "LSE",
+      "rows": 3496
+    },
+    {
+      "region": "GB",
+      "exchange": "IOB",
+      "rows": 939
+    },
+    {
+      "region": "DE",
+      "exchange": "GER",
+      "rows": 1566
+    },
+    {
+      "region": "DE",
+      "exchange": "FRA",
+      "rows": 13500
+    },
+    {
+      "region": "DE",
+      "exchange": "DUS",
+      "rows": 10979
+    },
+    {
+      "region": "DE",
+      "exchange": "MUN",
+      "rows": 10468
+    },
+    {
+      "region": "DE",
+      "exchange": "BER",
+      "rows": 0
+    },
+    {
+      "region": "DE",
+      "exchange": "HAM",
+      "rows": 4402
+    },
+    {
+      "region": "DE",
+      "exchange": "STU",
+      "rows": 13744
+    },
+    {
+      "region": "FR",
+      "exchange": "PAR",
+      "rows": 914
+    },
+    {
+      "region": "IT",
+      "exchange": "MIL",
+      "rows": 27000
+    },
+    {
+      "region": "ES",
+      "exchange": "MCE",
+      "rows": 205
+    },
+    {
+      "region": "NL",
+      "exchange": "AMS",
+      "rows": 251
+    },
+    {
+      "region": "CH",
+      "exchange": "EBS",
+      "rows": 466
+    },
+    {
+      "region": "JP",
+      "exchange": "JPX",
+      "rows": 3891
+    },
+    {
+      "region": "HK",
+      "exchange": "HKG",
+      "rows": 9644
+    },
+    {
+      "region": "IN",
+      "exchange": "NSI",
+      "rows": 3408
+    },
+    {
+      "region": "IN",
+      "exchange": "BSE",
+      "rows": 4766
+    },
+    {
+      "region": "AU",
+      "exchange": "ASX",
+      "rows": 1954
+    },
+    {
+      "region": "SG",
+      "exchange": "SES",
+      "rows": 591
+    },
+    {
+      "region": "BR",
+      "exchange": "SAO",
+      "rows": 2275
+    },
+    {
+      "region": "MX",
+      "exchange": "MEX",
+      "rows": 797
+    }
+  ]
+}
